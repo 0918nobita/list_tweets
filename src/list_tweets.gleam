@@ -24,13 +24,14 @@ fn dyn_to_tweets(
 }
 
 fn tweets_from_json(path: String) {
-  simplifile.read(path)
-  |> result.map_error(fn(_err) { "Failed to open " <> path })
-  |> result.then(fn(json_str) {
-    json_str
-    |> json.decode(dyn_to_tweets)
-    |> result.map_error(fn(_err) { "Failed to decode " <> path })
-  })
+  use json_str <- result.try(
+    simplifile.read(path)
+    |> result.map_error(fn(_err) { "Failed to open " <> path }),
+  )
+
+  json_str
+  |> json.decode(dyn_to_tweets)
+  |> result.map_error(fn(_err) { "Failed to decode " <> path })
 }
 
 pub fn main() {
