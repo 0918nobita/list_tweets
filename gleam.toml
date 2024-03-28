@@ -17,6 +17,7 @@ gleam_stdlib = "~> 0.34 or ~> 1.0"
 gleam_json = "~> 1.0"
 simplifile = "~> 1.6"
 gleam_bbmustache = "~> 2.2"
+birl = "~> 1.6"
 
 [dev-dependencies]
 gleeunit = "~> 1.0"

@@ -1,15 +1,13 @@
-import gleam/dynamic
+import gleam/dynamic as dyn
 import gleam/json
 import list_tweets/tweet.{type Tweet}
 
 pub type Tweets =
   List(Tweet)
 
-fn from_dynamic(
-  dyn: dynamic.Dynamic,
-) -> Result(Tweets, List(dynamic.DecodeError)) {
+fn from_dynamic(dyn: dyn.Dynamic) -> Result(Tweets, List(dyn.DecodeError)) {
   dyn
-  |> dynamic.list(of: tweet.from_dynamic)
+  |> dyn.list(of: tweet.from_dynamic)
 }
 
 pub fn from_json(json_str: String) -> Result(Tweets, json.DecodeError) {
