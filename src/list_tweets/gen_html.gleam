@@ -1,5 +1,5 @@
 import birl
-import gleam/bbmustache
+import gleam/bbmustache.{list as list_arg, object as obj_arg, string as str_arg} as mustache
 import gleam/dict
 import gleam/list
 import gleam/result
@@ -8,7 +8,7 @@ import simplifile
 
 pub fn gen_html(tweets: Tweets) -> Result(Nil, String) {
   use template <- result.try(
-    bbmustache.compile_file("tweets.mustache")
+    mustache.compile_file("tweets.mustache")
     |> result.map_error(fn(_err) { "Failed to compile template" }),
   )
 
@@ -26,20 +26,20 @@ pub fn gen_html(tweets: Tweets) -> Result(Nil, String) {
     |> dict.get(2024)
     |> result.unwrap(or: [])
     |> list.map(fn(tweet) {
-      bbmustache.object([
-        #("id", bbmustache.string(tweet.id)),
-        #("full_text", bbmustache.string(tweet.full_text)),
+      obj_arg([
+        #("id", str_arg(tweet.id)),
+        #("full_text", str_arg(tweet.full_text)),
         #(
           "created_at",
           tweet.created_at
             |> birl.to_iso8601
-            |> bbmustache.string,
+            |> str_arg,
         ),
       ])
     })
-    |> bbmustache.list
+    |> list_arg
 
-  bbmustache.render(template, injecting: [#("tweets", tweets)])
+  mustache.render(template, injecting: [#("tweets", tweets)])
   |> simplifile.write(to: "output/tweets.html")
   |> result.map_error(fn(_err) { "Failed to write file" })
 }
